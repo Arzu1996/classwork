@@ -4,13 +4,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-public class md5 {
+public class MD5 {
     public static void main(String[] args) throws NoSuchAlgorithmException {
         System.out.println("Enter string");
         Scanner inputOrigin = new Scanner(System.in);
         String origin = inputOrigin.nextLine();
-        String Md5=encrypted(origin);
-        System.out.println(Md5);
+        String MD5=encrypted(origin);
+        System.out.println(MD5);
     }
 
     private static String encrypted(String origin) throws NoSuchAlgorithmException {
