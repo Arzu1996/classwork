@@ -1,5 +1,7 @@
 package Algorithms.RSA;
 
+import java.math.BigInteger;
+import java.util.Random;
 import java.util.Scanner;
 
 public class RSA {
@@ -7,38 +9,41 @@ public class RSA {
         System.out.println("Enter string");
         Scanner inputOrigin = new Scanner(System.in);
         String origin = inputOrigin.nextLine();
-        System.out.println("Enter firstKey");
-        Scanner inputFirstKey= new Scanner(System.in);
-        int p = inputFirstKey.nextInt();
-        System.out.println("Enter secondKey");
-        Scanner inputSecondKey = new Scanner(System.in);
-        int q = inputSecondKey.nextInt();
-        int RSA=decryption(origin,p,q);
-        System.out.println(RSA);
+        byte[] RSA=encryption(origin);
+        System.out.println(bytesToString(RSA));
 
     }
 
-    private static int decryption(String origin, int p, int q) {
-        int c;
-        int n=p*q;
-        int x=(p-1)*(q-1);
-        int e;
-        for (e=2;e<x;e++){
-            if (gcd(x,e)==1){break;}
+    private static byte[] encryption(String origin) {
+        int  bitlength = 1024;
+        Random  r = new Random();
+        BigInteger p = BigInteger.probablePrime(bitlength,r);
+        BigInteger q = BigInteger.probablePrime(bitlength,r);
+        BigInteger d;
+        BigInteger N;
+        BigInteger phi;
+        BigInteger e;
+        N = p.multiply(q);
+        phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+        e = BigInteger.probablePrime(bitlength / 2, r);
+        while (phi.gcd(e).compareTo(BigInteger.ONE) > 0 && e.compareTo(phi) < 0)
+        {
+           e= e.add(BigInteger.ONE);
         }
-        int d;
-        for (int i=0;i<9;i++){
-            int y=1+(i*x);
-            if (y%e==0){
-                d=y/e;break;
-            }
-        }
-        c= (int) ((Math.pow(Double.parseDouble(origin),e))%n);
-        return c;
+        d = e.modInverse(phi);
+        return (new BigInteger(origin.getBytes())).modPow(e, N).toByteArray();
     }
+    private static String bytesToString(byte[] encrypted) {
 
-    private static int gcd(int x, int e) {
-        if (e==0) return e;
-        return gcd(x%e,e);
+        StringBuilder origin = new StringBuilder();
+
+        for (byte b : encrypted) {
+
+            origin.append(b);
+
+        }
+
+        return origin.toString();
+
     }
 }
