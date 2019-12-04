@@ -1,0 +1,9 @@
+1. function to check whether the given number
+   is a prime number
+   signature: boolean check(int origin)
+
+2. function to check whether the given
+   int number is a palindrome
+   signature: boolean check(int origin)
+
+3. function to generate 10000 prime numbers.
